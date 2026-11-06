@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For Bujji</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --night: #14152e;
+    --night-deep: #0c0d22;
+    --lamp: #f2b35c;
+    --rose: #e9a3b6;
+    --moon: #f4ede3;
+    --dim: #a9a6c4;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --night: #14152e; --night-deep: #0c0d22; --lamp: #f2b35c;
+      --rose: #e9a3b6; --moon: #f4ede3; --dim: #a9a6c4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --night: #14152e; --night-deep: #0c0d22; --lamp: #f2b35c;
+    --rose: #e9a3b6; --moon: #f4ede3; --dim: #a9a6c4;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    min-height: 100%;
+    background:
+      radial-gradient(1px 1px at 12% 18%, rgba(244,237,227,.7), transparent 60%),
+      radial-gradient(1px 1px at 78% 9%, rgba(244,237,227,.6), transparent 60%),
+      radial-gradient(1.5px 1.5px at 64% 31%, rgba(244,237,227,.5), transparent 60%),
+      radial-gradient(1px 1px at 31% 44%, rgba(244,237,227,.45), transparent 60%),
+      radial-gradient(1px 1px at 88% 52%, rgba(244,237,227,.5), transparent 60%),
+      radial-gradient(1px 1px at 6% 71%, rgba(244,237,227,.4), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 50% 100%, rgba(242,179,92,.14), transparent 70%),
+      linear-gradient(180deg, var(--night-deep), var(--night) 60%);
+    background-attachment: fixed;
+    color: var(--moon);
+    font-family: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+    font-size: 1.25rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 34rem; margin: 0 auto; padding: 0 1.5rem; }
+  [hidden] { display: none !important; }
+
+  /* Lock screen */
+  #lock {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem 1.5rem;
+  }
+  #lock h1 {
+    font-weight: 400; font-style: italic;
+    font-size: clamp(2.2rem, 8vw, 3.2rem); line-height: 1.1; margin: 0 0 .75rem;
+  }
+  #lock p { color: var(--dim); margin: 0 0 2rem; }
+  .count { display: flex; gap: 1.5rem; justify-content: center; font-variant-numeric: tabular-nums; }
+  .count div { min-width: 3.5rem; }
+  .count b { display: block; font-weight: 500; font-size: 2.6rem; line-height: 1; color: var(--lamp); }
+  .count span { font-size: 1rem; color: var(--dim); }
+
+  /* Candle */
+  #cake {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem 1.5rem;
+  }
+  #cake h1 {
+    font-weight: 400;
+    font-size: clamp(2.6rem, 11vw, 4.6rem);
+    line-height: 1.02; margin: 0 0 .5rem; letter-spacing: -.01em;
+  }
+  #cake h1 em { display: block; font-style: italic; color: var(--rose); }
+  #cake .hint { color: var(--dim); margin: 0 0 2.5rem; }
+  .candle-btn {
+    background: none; border: 0; padding: 1rem 2rem; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; border-radius: 1rem;
+  }
+  .candle-btn:focus-visible { outline: 2px solid var(--lamp); outline-offset: 4px; }
+  .flame {
+    width: 22px; height: 38px; border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+    background: radial-gradient(ellipse at 50% 72%, #fff6d8 0 22%, var(--lamp) 50%, rgba(242,120,60,.85) 78%, transparent 82%);
+    box-shadow: 0 0 40px 14px rgba(242,179,92,.35), 0 0 110px 40px rgba(242,179,92,.12);
+    transform-origin: 50% 100%;
+    animation: flicker 2.4s ease-in-out infinite;
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .wick { width: 2px; height: 8px; background: #3a2b22; }
+  .stick {
+    width: 16px; height: 88px; border-radius: 3px 3px 2px 2px;
+    background: repeating-linear-gradient(135deg, var(--moon) 0 9px, var(--rose) 9px 18px);
+  }
+  .out .flame { opacity: 0; transform: scaleY(.2); animation: none; }
+  .smoke {
+    width: 6px; height: 40px; margin-top: -40px; opacity: 0;
+    background: linear-gradient(to top, rgba(244,237,227,.35), transparent);
+    border-radius: 50%; filter: blur(3px);
+  }
+  .out .smoke { animation: smoke 2.2s ease-out forwards; }
+  @keyframes flicker {
+    0%,100% { transform: scale(1,1) rotate(-1deg); }
+    40% { transform: scale(.94,1.06) rotate(1.5deg); }
+    70% { transform: scale(1.04,.96) rotate(-.5deg); }
+  }
+  @keyframes smoke {
+    0% { opacity: 0; transform: translateY(0) scaleX(1); }
+    20% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-60px) scaleX(2.5); }
+  }
+  #wish { margin-top: 2rem; min-height: 2em; font-style: italic; color: var(--lamp); }
+
+  /* Letter */
+  #letter { padding: 4rem 0 6rem; }
+  .names {
+    font-style: italic; color: var(--rose);
+    font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; margin: 0 0 2rem;
+  }
+  #letter p { margin: 0 0 1.25rem; }
+  .memory {
+    margin: 3.5rem 0; padding-left: 1.25rem;
+    border-left: 1px solid rgba(242,179,92,.45);
+  }
+  .memory h2 {
+    font-weight: 500; font-style: italic; color: var(--lamp);
+    font-size: 1.5rem; line-height: 1.3; margin: 0 0 .75rem;
+  }
+  .closing { font-size: clamp(1.6rem, 6vw, 2.1rem); line-height: 1.3; margin: 4rem 0 1.5rem; }
+  .sign { font-family: "Caveat", "Segoe Script", cursive; font-size: 2.2rem; color: var(--rose); margin: 0; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity 1.2s ease, transform 1.2s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flame { animation: none; }
+    .out .smoke { animation: none; }
+    .reveal { transition: none; opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<section id="lock" hidden>
+  <h1>Not yet, Bujji.</h1>
+  <p>Something is waiting for you at midnight.</p>
+  <div class="count" aria-live="polite">
+    <div><b id="h">00</b><span>hours</span></div>
+    <div><b id="m">00</b><span>minutes</span></div>
+    <div><b id="s">00</b><span>seconds</span></div>
+  </div>
+</section>
+
+<section id="cake" hidden>
+  <h1>Happy birthday, <em>Mounika</em></h1>
+  <p class="hint">Close your eyes, make a wish, then tap the candle.</p>
+  <button class="candle-btn" id="candle" aria-label="Blow out the candle">
+    <div class="flame"></div>
+    <div class="smoke"></div>
+    <div class="wick"></div>
+    <div class="stick"></div>
+  </button>
+  <p id="wish" aria-live="polite"></p>
+</section>
+
+<main id="letter" hidden>
+  <div class="wrap">
+    <p class="names reveal">Bujji, Kannamma, Kanna</p>
+
+    <p class="reveal">Today the world got a little luckier, because it’s the day you came into it.</p>
+    <p class="reveal">I don’t need a special day to say this, but today feels like the right one. I love you. I always have, and I still do. Not for anything in return, not because of anything at all. Just because you are you.</p>
+
+    <div class="memory reveal">
+      <h2>The parking lot</h2>
+      <p>Our first kiss. I don’t think it ever really ended. It never left my lips. Some nights I still feel it in my dreams, as if no time has passed at all.</p>
+    </div>
+
+    <div class="memory reveal">
+      <h2>Our first night out</h2>
+      <p>The car, the night, the quiet. And you, holding me from behind. I didn’t have the words then and I don’t fully have them now. All I know is that it was something else, and I still carry it with me.</p>
+    </div>
+
+    <p class="reveal">There are so many more moments, our first hug, the way we found each other, and a hundred little things only we know. I keep all of them close.</p>
+    <p class="reveal">Whatever today brings, I hope you feel how loved you are. By so many people, and by me, always, in every way, without conditions.</p>
+
+    <p class="closing reveal">Happy birthday, Kannamma. Keep smiling the way only you do.</p>
+    <p class="sign reveal">Your Kanna</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  // Midnight, 7 November 2026, India time (IST = UTC+5:30)
+  var UNLOCK = Date.UTC(2026, 10, 6, 18, 30, 0);
+  var lock = document.getElementById('lock');
+  var cake = document.getElementById('cake');
+  var letter = document.getElementById('letter');
+  var timer;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function showCake() {
+    clearInterval(timer);
+    lock.hidden = true;
+    cake.hidden = false;
+  }
+
+  function tick() {
+    var left = UNLOCK - Date.now();
+    if (left <= 0) { showCake(); return; }
+    var t = Math.floor(left / 1000);
+    document.getElementById('h').textContent = pad(Math.floor(t / 3600));
+    document.getElementById('m').textContent = pad(Math.floor((t % 3600) / 60));
+    document.getElementById('s').textContent = pad(t % 60);
+  }
+
+  if (location.hash === '#preview' || Date.now() >= UNLOCK) {
+    showCake();
+  } else {
+    lock.hidden = false;
+    tick();
+    timer = setInterval(tick, 1000);
+  }
+
+  var candle = document.getElementById('candle');
+  candle.addEventListener('click', function () {
+    if (candle.classList.contains('out')) return;
+    candle.classList.add('out');
+    candle.setAttribute('aria-label', 'Candle blown out');
+    document.getElementById('wish').textContent = 'I hope every bit of it comes true.';
+    setTimeout(function () {
+      letter.hidden = false;
+      letter.scrollIntoView({ behavior: 'smooth' });
+      var items = letter.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.25 });
+        items.forEach(function (el) { io.observe(el); });
+      } else {
+        items.forEach(function (el) { el.classList.add('on'); });
+      }
+    }, 2200);
+  });
+})();
+</script>
+</body>
+</html>
